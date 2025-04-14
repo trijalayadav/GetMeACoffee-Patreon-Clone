@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         <SessionWrapper>
           <Navbar />
           <div className="relative">
-            <div className="min-h-[81vh] w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
+            <div className="text-white min-h-[81vh] w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
               {children}
             </div>
           </div>
