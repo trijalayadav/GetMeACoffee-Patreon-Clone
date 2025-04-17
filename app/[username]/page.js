@@ -1,14 +1,34 @@
-import React from 'react'
+"use client"
+
+import React, { useState, useEffect } from 'react';
 
 const Username = ({ params }) => {
+    const [activeTab, setActiveTab] = useState('home');
+    const [unwrappedParams, setUnwrappedParams] = useState(null);
+
+    // Use useEffect to handle the Promise
+    useEffect(() => {
+        const fetchParams = async () => {
+            const resolvedParams = await params;
+            setUnwrappedParams(resolvedParams);
+        };
+
+        fetchParams();
+    }, [params]);
+
+    if (!unwrappedParams) {
+        // Loading state, render something while params are being resolved
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
-            < div className='cover top-0' >
+            <div className='cover top-0'>
                 <img className='w-full h-80' src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/70936/fccab496244a439ea726d3177546295a/eyJ3IjoxMjAwLCJ3ZSI6MX0%3D/9.png?token-time=1746316800&token-hash=JJ_OPoi-GHPMgS65IlPoRe5wxs--VuiOJeM3tNQ1SQY%3D" alt="" />
                 <div className='relative bottom-10 flex flex-col items-center'>
                     <img className='w-28 h-28 border border-black border-1 rounded-md' src="https://i.pinimg.com/474x/7a/23/b1/7a23b17de2db58d12f3561351c793e05.jpg" alt="" />
                     <div className='info flex flex-col justify-center items-center gap-2'>
-                        <div className='font-bold'>{params.username}</div>
+                        <div className='font-bold'>{unwrappedParams.username}</div>
                         <div className=''>Making mountains out of molehills</div>
                         <button className='bg-white text-black font-medium border-white border-1 rounded-md py-2 px-14'>Join for free</button>
                         <div>
@@ -18,44 +38,68 @@ const Username = ({ params }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Tabs for Home and About */}
             <div className='flex justify-center gap-5 py-2'>
-                <div>Home</div>
-                <div>About</div>
+                <button
+                    onClick={() => setActiveTab('home')}
+                    className={`px-4 py-1 ${activeTab === 'home' ? 'font-bold underline' : ''}`}
+                >
+                    Home
+                </button>
+                <button
+                    onClick={() => setActiveTab('about')}
+                    className={`px-4 py-1 ${activeTab === 'about' ? 'font-bold underline' : ''}`}
+                >
+                    About
+                </button>
             </div>
             <hr />
-            <div className='payment mt-10'>
 
-                <div className='Home'>
-                    <h2>Choose your membership</h2>
-                    <div>
-                        <h3>Low-land Pioneer</h3>
-                        <div>$5 / month</div>
-                        <button>Join</button>
-                    </div>
-                    <div>
-                        <div>YOU MIGHT LIKE</div>
-                        <div>
-                            <h3>Mound Conqueror</h3>
-                            <div>$10 / month</div>
-                            <button>Join</button>
+            {/* Content for Active Tab */}
+            {activeTab === 'home' && (
+                <div className='payment mt-10'>
+                    <div className='Home flex flex-col items-center gap-7'>
+                        <h2 className="font-semibold text-2xl">Choose your membership</h2>
+                        <div className="flex flex-row items-center gap-3">
+                            <div className='flex flex-col bg-gray-800 border border-1 border-white rounded-md p-5 gap-y-3'>
+                                <h3 className="font-bold text-xl">Low-land Pioneer</h3>
+                                <div className='flex flex-row'><div className='font-bold text-2xl'>$5</div> / month</div>
+                                <button className="bg-white text-black font-medium border-white border-1 rounded-md py-2 px-14">Join</button>
+                            </div>
+                            <div className='border-2 border-white rounded-md bg-white flex flex-col items-center'>
+                                <div className='text-black text-sm font-semibold'>YOU MIGHT LIKE</div>
+                                <div className='flex flex-col bg-gray-800 p-5 pb-10 gap-y-3 w-52 h-52'>
+                                    <div className='flex flex-col gap-1'>
+                                        <h3 className="font-bold text-xl">Mound Conqueror</h3>
+                                        <div className='flex flex-row items-end'><div className='font-bold text-2xl'>$10</div> / month</div>
+                                    </div>
+                                    <button className="bg-white text-black font-medium border-white border-1 rounded-md py-2 px-14">Join</button>
+                                </div>
+                            </div>
+                            <div className='flex flex-col bg-gray-800 border border-1 border-white rounded-md p-5 gap-y-3'>
+                                <h3 className="font-bold text-xl">Norfolk Summit Club</h3>
+                                <div className='flex flex-row'><div className='font-bold text-2xl'>$20</div> / month</div>
+                                <div>
+                                    <button className="bg-white text-black font-medium border-white border-1 rounded-md py-2 px-14">Join</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex justify-between items-center gap-2'>
+                            <img className='w-10' src="https://c5.patreon.com/external/gifting/gift_white_three_times_loop.gif" alt="" />
+                            <div>Gift a membership to {unwrappedParams.username}</div>
+                            <button className='bg-gray-800 border border-gray-800 rounded-3xl px-5 py-2'>Gift Now</button>
                         </div>
                     </div>
-                    <div>
-                        <h3>Norfolk Summit Club</h3>
-                        <div>$20 / month</div>
-                        <button>Join</button>
-                    </div>
-                    <div>
-                        <img src="https://c5.patreon.com/external/gifting/gift_white_three_times_loop.gif" alt="" />
-                        <div>Gift membership</div>
-                        <div>Bring the world of Ben Woodier to your friends and family.</div>
-                        <button>Gift</button>
-                    </div>
                 </div>
-                <div className='About flex flex-col items-center gap-3'>
-                    <div className='bg-gray-800 w-[50vw] border-gray-800 border-1 rounded-lg p-5'>I’m Ben Woodier, an explorer of Norfolk’s "mountainous" terrain. If you’re wondering what Norfolk has in the way of peaks... so am I.
+            )}
 
-                        I documents my relentless search for these mythical summits, from the dizzying heights of Beeston Bump to any raised bit of earth that dares to stand above sea level.
+            {activeTab === 'about' && (
+                <div className='About flex flex-col items-center gap-3 mt-10'>
+                    <div className='bg-gray-800 w-[50vw] border-gray-800 border-1 rounded-lg p-5'>
+                        I’m Ben Woodier, an explorer of Norfolk’s "mountainous" terrain. If you’re wondering what Norfolk has in the way of peaks... so am I.
+
+                        I document my relentless search for these mythical summits, from the dizzying heights of Beeston Bump to any raised bit of earth that dares to stand above sea level.
 
                         It’s a saga of disappointment with a suspicious amount of dedication to finding high ground where there is none.
 
@@ -66,11 +110,9 @@ const Username = ({ params }) => {
                         <div className='font-semibold'>2</div>
                     </div>
                 </div>
-            </div>
-
-
+            )}
         </>
-    )
+    );
 }
 
-export default Username
+export default Username;
