@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "flowbite-react": "^0.10.2",
+    "mongoose": "^8.13.2",
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "nodemailer": "^6.10.0",
